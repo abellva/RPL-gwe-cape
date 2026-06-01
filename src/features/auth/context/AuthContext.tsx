@@ -53,6 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Initialize user from localStorage
   useEffect(() => {
     const savedUser = safeLocalStorage.getItem('user');
     const savedToken = safeLocalStorage.getItem('token');
@@ -66,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
     setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const persistUser = (responseUser: User, token: string): User => {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/src/features/auth/context/AuthContext";
+import { getChatPath } from "@/src/features/auth/utils/redirect";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -32,6 +33,9 @@ const Navbar = () => {
           <li><Link href="/popular">Popular</Link></li>
           <li><Link href="/search-city">Search City</Link></li>
           {user && user.role === 'user' && <li><Link href="/customer/bookings">My Booking</Link></li>}
+          <li>
+            <Link href={user ? getChatPath(user.role) : '/auth/login'}>Chat</Link>
+          </li>
         </ul>
         <div className="flex items-center gap-4">
           {user ? (

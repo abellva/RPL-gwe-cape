@@ -7,7 +7,6 @@ import { StatCard } from '@/src/features/dashboard/components/StatCard';
 import { StatusBadge } from '@/src/features/dashboard/components/StatusBadge';
 import { dashboardService } from '@/src/features/dashboard/services/dashboard.service';
 import { DashboardBooking } from '@/src/features/dashboard/types/dashboard.types';
-import { ChatPanel } from '@/src/features/chat/components/ChatPanel';
 import { officeSpaces } from '@/src/features/offices/data/officeSpaces.mock';
 
 export default function ProviderDashboard() {
@@ -50,14 +49,14 @@ export default function ProviderDashboard() {
         <p className="text-sm text-[#000929] opacity-60 mt-1">Kelola kantor dan pemesanan dari panel provider ini.</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-6">
         <StatCard label="Kantor Saya" value={myOffices.length} icon="🏢" accent="#FF852D" />
         <StatCard label="Total Booking" value={bookings.length} icon="📅" accent="#FF852D" />
         <StatCard label="Pending" value={pending} icon="⏳" accent="#FF852D" />
         <StatCard label="Pendapatan" value={`Rp ${revenue.toLocaleString('id-ID')}`} icon="💰" accent="#FF852D" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-6">
         <Link href="/provider/offices" className="p-6 bg-white border border-[#E0DEF7] rounded-[20px] hover:border-[#FF852D] hover:shadow-md transition-all">
           <h3 className="font-semibold text-[#000929] mb-1">🏢 Kelola Kantor</h3>
           <p className="text-sm opacity-60">Lihat dan kelola listing kantor Anda</p>
@@ -66,10 +65,6 @@ export default function ProviderDashboard() {
           <h3 className="font-semibold text-[#000929] mb-1">📅 Lihat Bookings</h3>
           <p className="text-sm opacity-60">Konfirmasi pemesanan dari customer</p>
         </Link>
-        <Link href="/provider/chat" className="p-6 bg-white border border-[#E0DEF7] rounded-[20px] hover:border-[#FF852D] hover:shadow-md transition-all">
-          <h3 className="font-semibold text-[#000929] mb-1">💬 Messages</h3>
-          <p className="text-sm opacity-60">Chat dengan customer</p>
-        </Link>
         <Link href="/" className="p-6 bg-white border border-[#E0DEF7] rounded-[20px] hover:border-[#FF852D] hover:shadow-md transition-all">
           <h3 className="font-semibold text-[#000929] mb-1">🌐 Lihat Website</h3>
           <p className="text-sm opacity-60">Preview halaman publik kantor Anda</p>
@@ -77,15 +72,7 @@ export default function ProviderDashboard() {
       </div>
 
       <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
-        <div className="mb-4">
-          <h3 className="font-bold text-lg">💬 Chat dengan Customer</h3>
-          <p className="text-sm opacity-60 mt-1">Balas pesan dari customer yang tertarik dengan kantor Anda</p>
-        </div>
-        <ChatPanel mode="provider" />
-      </div>
-
-      <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between gap-4 mb-4">
           <h3 className="font-bold text-[#000929]">Booking Terbaru</h3>
           <Link href="/provider/bookings" className="text-sm font-semibold text-[#FF852D] hover:underline">Lihat semua</Link>
         </div>

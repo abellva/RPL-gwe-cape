@@ -38,7 +38,10 @@ export default function SaveForLaterButton({ officeId, officeTitle, officeSlug, 
           office_location: officeLocation,
         }),
       });
-      if (res.ok) setSaved(true);
+      if (res.ok) {
+        setSaved(true);
+        window.location.href = '/customer/wishlist';
+      }
     } catch {
       console.error('Failed to save');
     } finally {

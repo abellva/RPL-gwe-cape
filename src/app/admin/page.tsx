@@ -6,7 +6,6 @@ import { useAuth } from '@/src/features/auth/context/AuthContext';
 import { StatCard } from '@/src/features/dashboard/components/StatCard';
 import { StatusBadge } from '@/src/features/dashboard/components/StatusBadge';
 import { dashboardService } from '@/src/features/dashboard/services/dashboard.service';
-import { ChatPanel } from '@/src/features/chat/components/ChatPanel';
 import { DashboardBooking, DashboardUser } from '@/src/features/dashboard/types/dashboard.types';
 
 export default function AdminDashboard() {
@@ -45,25 +44,21 @@ export default function AdminDashboard() {
         <p className="text-sm text-[#000929] opacity-60 mt-1">Kelola platform OfficeHub dari panel admin ini.</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-6">
         <StatCard label="Total Users" value={users.length} icon="👥" />
         <StatCard label="Customers" value={customers} icon="🧑" />
         <StatCard label="Providers" value={providers} icon="🏢" />
         <StatCard label="Pending Bookings" value={pendingBookings} icon="⏳" accent="#FF852D" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-6">
         <Link href="/admin/users" className="p-6 bg-white border border-[#E0DEF7] rounded-[20px] hover:border-[#0D903A] hover:shadow-md transition-all">
           <h3 className="font-semibold text-[#000929] mb-1">👥 Manage Users</h3>
           <p className="text-sm opacity-60">Lihat dan kelola semua pengguna platform</p>
         </Link>
         <Link href="/admin/bookings" className="p-6 bg-white border border-[#E0DEF7] rounded-[20px] hover:border-[#0D903A] hover:shadow-md transition-all">
-          <h3 className="font-semibold text-[#000929] mb-1">📋 Manage Bookings</h3>
-          <p className="text-sm opacity-60">Konfirmasi atau batalkan pemesanan</p>
-        </Link>
-        <Link href="/admin/chat" className="p-6 bg-white border border-[#E0DEF7] rounded-[20px] hover:border-[#0D903A] hover:shadow-md transition-all">
-          <h3 className="font-semibold text-[#000929] mb-1">💬 Chat Support</h3>
-          <p className="text-sm opacity-60">Monitor percakapan customer & provider</p>
+          <h3 className="font-semibold text-[#000929] mb-1">📋 Monitor Bookings</h3>
+          <p className="text-sm opacity-60">Lihat dan pantau status pemesanan</p>
         </Link>
         <Link href="/" className="p-6 bg-white border border-[#E0DEF7] rounded-[20px] hover:border-[#0D903A] hover:shadow-md transition-all">
           <h3 className="font-semibold text-[#000929] mb-1">🌐 Browse Site</h3>
@@ -72,15 +67,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
-        <div className="mb-4">
-          <h3 className="font-bold text-lg">💬 Kelola Chat Platform</h3>
-          <p className="text-sm opacity-60 mt-1">Monitor dan moderasi semua percakapan customer & provider</p>
-        </div>
-        <ChatPanel mode="admin" />
-      </div>
-
-      <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between gap-4 mb-4">
           <h3 className="font-bold text-[#000929]">Booking Terbaru</h3>
           <Link href="/admin/bookings" className="text-sm font-semibold text-[#0D903A] hover:underline">Lihat semua</Link>
         </div>

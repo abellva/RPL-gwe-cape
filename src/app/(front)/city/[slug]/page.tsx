@@ -1,9 +1,9 @@
+import { Metadata } from "next";
 import Navbar from "@/src/components/Navbar";
 import Header from "@/src/components/Header";
 import { cities } from "@/src/features/cities/data/cities.mock";
-import { officeSpaces } from "@/src/features/offices/data/officeSpaces.mock";
-import OfficeSpaceCard from "@/src/features/offices/components/OfficeSpaceCard";
 import { notFound } from "next/navigation";
+import CityOfficesClient from "./CityOfficesClient";
 
 export const dynamic = 'force-dynamic';
 
@@ -33,10 +33,6 @@ export default async function CityDetailPage({ params }: Props){
   const city = cities.find((c) => c.slug === slug);
   if (!city) return notFound();
 
-  const cityOffices = officeSpaces.filter(
-    (space) => space.location === city.name
-  );
-
     return(
         <>
   <Navbar/>
@@ -49,16 +45,7 @@ export default async function CityDetailPage({ params }: Props){
       Browse Offices
     </h2>
 
-        <div className="grid grid-cols-3 gap-[30px]">
-        {cityOffices.length > 0 ? (
-          cityOffices.map((space) => (
-            <OfficeSpaceCard key={space.id} space={space} />
-          ))
-        ) : (
-          <p className="text-lg leading-8 text-[#000929]">
-            No office spaces available in {city.name} at the moment. Please check back later.
-        </p>
-      )}</div>
+        <CityOfficesClient cityName={city.name} />
   </section>
 </>
     );

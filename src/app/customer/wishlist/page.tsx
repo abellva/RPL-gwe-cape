@@ -26,10 +26,13 @@ export default function WishlistPage() {
     const fetchWishlists = async () => {
       try {
         const res = await fetch(`/api/wishlists/user/${user.id}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch wishlists');
+        }
         const data = await res.json();
         setWishlists(Array.isArray(data) ? data : []);
-      } catch {
-        console.error('Failed to fetch wishlists');
+      } catch (error) {
+        console.error('Failed to fetch wishlists:', error);
       } finally {
         setLoadingData(false);
       }
@@ -39,10 +42,13 @@ export default function WishlistPage() {
 
   const handleRemove = async (id: number) => {
     try {
-      await fetch(`/api/wishlists/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/wishlists/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        throw new Error('Failed to remove wishlist');
+      }
       setWishlists(wishlists.filter((w) => w.id !== id));
-    } catch {
-      console.error('Failed to remove wishlist');
+    } catch (error) {
+      console.error('Failed to remove wishlist:', error);
     }
   };
 
@@ -55,7 +61,7 @@ export default function WishlistPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
         <h2 className="font-bold text-lg">My Wishlist</h2>
         <p className="text-sm opacity-60 mt-1">Kantor favorit yang Anda simpan</p>

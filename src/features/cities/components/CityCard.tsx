@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { City } from "@/src/types";
+import { City } from "@/src/features/cities/types/city.types";
 import Link from "next/link";
 
 export default function CityCard({ city }: { city: City }) {

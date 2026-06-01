@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Navbar from "@/src/components/Navbar";
 import Image from "next/image";
 export const dynamic = 'force-dynamic';

@@ -1,10 +1,19 @@
 "use client";
 
-import { cities } from "../../cities/data/cities.mock";
 import OfficeSpaceCard from "../components/OfficeSpaceCard";
-import { officeSpaces } from "../data/officeSpaces.mock";
+import { useState, useEffect } from "react";
+import type { OfficeSpace } from "../types/officeSpace.types";
+import { getAllOffices } from "../store/providerOffices.store";
 
 export default function FreshSpaceSection() {
+  const [offices, setOffices] = useState<OfficeSpace[]>([]);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setOffices(getAllOffices());
+    setIsHydrated(true);
+  }, []);
+
   return (
     <section
       id="Fresh-Space"
@@ -14,10 +23,9 @@ export default function FreshSpaceSection() {
         Browse Our Fresh Space.<br />For Your Better Productivity.
       </h2>
       <div className="grid grid-cols-3 gap-[30px]">
-        {officeSpaces.map((office) => (
+        {isHydrated && offices.map((office) => (
           <OfficeSpaceCard key={office.id} space={office} />
         ))}
-
       </div>
     </section> 
   );

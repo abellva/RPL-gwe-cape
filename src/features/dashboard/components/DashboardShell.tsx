@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/src/features/auth/context/AuthContext';
 import { DashboardNavItem, DashboardTheme } from '../types/dashboard.types';
 
-const themeConfig: Record<DashboardTheme, { accent: string; badge: string; label: string }> = {
-  admin: { accent: '#0D903A', badge: 'Admin', label: 'Admin Panel' },
-  provider: { accent: '#FF852D', badge: 'Provider', label: 'Provider Panel' },
-  customer: { accent: '#0D903A', badge: 'Customer', label: 'Customer Panel' },
+const themeConfig: Record<DashboardTheme, { accent: string; badge: string }> = {
+  admin: { accent: '#0D903A', badge: 'Admin' },
+  provider: { accent: '#FF852D', badge: 'Provider' },
+  customer: { accent: '#0D903A', badge: 'Customer' },
 };
 
 interface DashboardShellProps {
@@ -24,17 +24,36 @@ export function DashboardShell({ theme, navItems, children }: DashboardShellProp
   const config = themeConfig[theme];
 
   return (
-    <div className="min-h-screen bg-[#F7F7FD] flex">
-      {/* Sidebar */}
-      <aside className="w-[260px] bg-white border-r border-[#E0DEF7] flex flex-col shrink-0 sticky top-0 h-screen">
-        <div className="p-6 border-b border-[#E0DEF7]">
-          <Link href="/">
-            <Image src="/assets/images/logos/logo.svg" alt="logo" width={130} height={36} style={{ height: 'auto' }} />
-          </Link>
-          <p className="text-xs font-semibold mt-3 opacity-50 uppercase tracking-wider">{config.label}</p>
-        </div>
+    <div className="min-h-screen bg-[#F7F7FD]">
 
-        <nav className="flex-1 p-4 flex flex-col gap-1">
+      {/* Navbar */}
+      <nav className="bg-white border-b border-[#E0DEF7] fixed top-0 left-0 right-0 z-50">
+        <div className="flex items-center justify-between w-full max-w-[1130px] py-[22px] mx-auto px-4">
+          <Link href="/">
+            <Image src="/assets/images/logos/logo.svg" alt="logo" width={150} height={40} style={{ height: "auto" }} />
+          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="font-medium text-[#000929] hover:text-[#0D903A] transition-colors">Home</Link>
+            <span className="font-semibold text-[#000929]">{user?.name}</span>
+            <span className="text-white text-xs font-semibold px-4 py-1.5 rounded-full" style={{ backgroundColor: config.accent }}>
+              {config.badge}
+            </span>
+            <button
+              onClick={logout}
+              className="rounded-full border border-[#FF2D2D] text-[#FF2D2D] font-semibold py-2 px-5 hover:bg-[#FF2D2D] hover:text-white transition-all text-sm"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Sidebar */}
+      <aside
+        className="bg-white border-r border-[#E0DEF7] fixed left-0 z-40 h-[calc(100vh-81px)] top-[81px] overflow-hidden hover:overflow-y-auto"
+        style={{ width: '260px' }}
+      >
+        <nav className="p-4 flex flex-col gap-1 h-full overflow-y-auto">
           {navItems.map((item) => {
             const basePath = theme === 'admin' ? '/admin' : theme === 'provider' ? '/provider' : '/customer';
             const isActive = pathname === item.href || (item.href !== basePath && pathname.startsWith(item.href));
@@ -55,38 +74,12 @@ export function DashboardShell({ theme, navItems, children }: DashboardShellProp
             );
           })}
         </nav>
-
-        <div className="p-4 border-t border-[#E0DEF7]">
-          <div className="px-4 py-3 mb-2">
-            <p className="font-semibold text-sm text-[#000929] truncate">{user?.name}</p>
-            <p className="text-xs text-[#000929] opacity-50 truncate">{user?.email}</p>
-          </div>
-          <button
-            onClick={logout}
-            className="w-full rounded-full border border-[#FF2D2D] text-[#FF2D2D] font-semibold py-2 px-4 text-sm hover:bg-[#FF2D2D] hover:text-white transition-all"
-          >
-            Logout
-          </button>
-        </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 min-w-0">
-        <header className="bg-white border-b border-[#E0DEF7] px-8 py-5 flex items-center justify-between sticky top-0 z-10">
-          <div>
-            <h1 className="font-bold text-xl text-[#000929]">
-              {navItems.find((n) => pathname === n.href || (n.href !== (theme === 'admin' ? '/admin' : theme === 'provider' ? '/provider' : '/customer') && pathname.startsWith(n.href)))?.label ?? 'Dashboard'}
-            </h1>
-          </div>
-          <span
-            className="text-white text-xs font-semibold px-4 py-1.5 rounded-full"
-            style={{ backgroundColor: config.accent }}
-          >
-            {config.badge}
-          </span>
-        </header>
-        <div className="p-8">{children}</div>
-      </main>
+      <main style={{ marginLeft: theme === 'customer' ? '260px' : '260px', paddingTop: '81px', paddingLeft: theme === 'customer' ? '0' : '32px', paddingRight: theme === 'customer' ? '0' : '32px' }} className="pb-8">
+  {children}
+</main>
+
     </div>
   );
 }

@@ -45,21 +45,24 @@ export default function OfficeFeatures({ features }: { features: string[] }) {
     <div className="grid grid-cols-3 gap-x-5 gap-y-[30px]">
       {features?.map((feature) => {
         const matched = FEATURES_MAP.find((f) => f.label === feature);
-        
-        if (!matched) return null;
+        const icon = matched?.icon || "/assets/images/icons/verify.svg";
+        const description = matched?.description || "Feature";
 
         return (
           <div key={feature} className="flex items-center gap-4">
             <Image
-              src={matched.icon}
+              src={icon}
               className="w-[34px] h-[34px]"
-              alt={`${matched.label} icon`}
+              alt={`${feature} icon`}
               width={34}
               height={34}
+              onError={(result) => {
+                result.currentSrc = "/assets/images/icons/verify.svg";
+              }}
             />
             <div className="flex flex-col gap-[2px]">
-              <p className="font-bold text-lg leading-[24px]">{matched.label}</p>
-              <p className="text-sm leading-[21px]">{matched.description}</p>
+              <p className="font-bold text-lg leading-[24px]">{feature}</p>
+              <p className="text-sm leading-[21px]">{description}</p>
             </div>
           </div>
         );

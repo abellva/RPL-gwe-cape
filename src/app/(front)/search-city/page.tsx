@@ -3,7 +3,8 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import NavbarWrapper from "@/src/components/NavbarWrapper";
 import OfficeSpaceCard from "@/src/features/offices/components/OfficeSpaceCard";
-import { officeSpaces } from "@/src/features/offices/data/officeSpaces.mock";
+import type { OfficeSpace } from "@/src/features/offices/types/officeSpace.types";
+import { getAllOffices } from "@/src/features/offices/store/providerOffices.store";
 
 const popularCities = ["Jakarta", "Surabaya", "Bandung", "Medan", "Bali"];
 
@@ -11,12 +12,12 @@ export default function SearchCityPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [submittedQuery, setSubmittedQuery] = useState('');
   const [searched, setSearched] = useState(false);
-  const [results, setResults] = useState<typeof officeSpaces>([]);
+  const [results, setResults] = useState<OfficeSpace[]>([]);
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    const filtered = officeSpaces.filter((office) =>
+    const filtered = getAllOffices().filter((office) =>
       office.location.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setResults(filtered);
@@ -26,7 +27,7 @@ export default function SearchCityPage() {
 
   const handleCityClick = (city: string) => {
     setSearchQuery(city);
-    const filtered = officeSpaces.filter((office) =>
+    const filtered = getAllOffices().filter((office) =>
       office.location.toLowerCase().includes(city.toLowerCase())
     );
     setResults(filtered);
@@ -95,7 +96,7 @@ export default function SearchCityPage() {
           results.length > 0 ? (
             <div className="flex flex-col gap-6">
               <h2 className="font-bold text-[22px] text-[#000929]">
-                <span className="text-[#0D903A]">{results.length} kantor</span> ditemukan di "{submittedQuery}"
+                <span className="text-[#0D903A]">{results.length} kantor</span> ditemukan di &quot;{submittedQuery}&quot;
               </h2>
               <div className="grid grid-cols-3 gap-[30px]">
                 {results.map((office) => (
@@ -106,7 +107,7 @@ export default function SearchCityPage() {
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
               <div className="w-16 h-16 rounded-2xl bg-white border border-[#E0DEF7] flex items-center justify-center text-3xl shadow-sm">🏙️</div>
-              <p className="text-xl font-semibold text-[#000929]">Tidak ada kantor di "{submittedQuery}"</p>
+              <p className="text-xl font-semibold text-[#000929]">Tidak ada kantor di &quot;{submittedQuery}&quot;</p>
               <p className="text-[#999] text-sm">Coba kota lain seperti Jakarta atau Surabaya</p>
             </div>
           )

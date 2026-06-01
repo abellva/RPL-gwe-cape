@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { OfficeSpace } from "../types/officeSpace.types";
 import Image from "next/image";

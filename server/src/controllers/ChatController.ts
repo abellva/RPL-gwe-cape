@@ -1,5 +1,5 @@
 import { Controller, Post, Get, Put, Param, Body, Req } from "routing-controllers";
-import { CreateChatDto, SendMessageDto, ChatResponseDto } from "../dtos/Chat.dto";
+import type { CreateChatDto, SendMessageDto, ChatResponseDto } from "../dtos/Chat.dto";
 
 // In-memory storage untuk demo (gunakan database di production)
 const chats: Map<string, any> = new Map();

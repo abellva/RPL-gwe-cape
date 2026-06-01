@@ -35,14 +35,17 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
-      <h2 className="font-bold text-lg text-[#000929] mb-6">Semua Pengguna ({users.length})</h2>
+    <div className="space-y-8">
+      <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <h2 className="font-bold text-lg text-[#000929]">Semua Pengguna ({users.length})</h2>
+        </div>
 
-      {users.length === 0 ? (
-        <p className="text-sm opacity-50 text-center py-12">Belum ada pengguna terdaftar.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        {users.length === 0 ? (
+          <p className="text-sm opacity-50 text-center py-12">Belum ada pengguna terdaftar.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E0DEF7] text-left opacity-60">
                 <th className="pb-3 font-medium">Nama</th>
@@ -59,7 +62,7 @@ export default function AdminUsersPage() {
                   <td className="py-4 opacity-70">{u.email}</td>
                   <td className="py-4"><RoleBadge role={u.role} /></td>
                   <td className="py-4 opacity-70">
-                    {new Date(u.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(u.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </td>
                   <td className="py-4">
                     <select
@@ -76,9 +79,10 @@ export default function AdminUsersPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
-      )}
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

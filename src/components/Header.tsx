@@ -1,6 +1,6 @@
 'use client';
 
-import { City } from "@/src/types";
+import { City } from "@/src/features/cities/types/city.types";
 
 interface HeaderProps {
   city?: City;

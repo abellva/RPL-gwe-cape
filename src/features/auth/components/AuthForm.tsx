@@ -55,7 +55,7 @@ export default function AuthForm() {
           email: formData.email,
           password: formData.password,
           name: formData.name,
-          role: formData.role,
+          role: formData.role as UserRole,
         });
       }
 

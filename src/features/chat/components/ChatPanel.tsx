@@ -137,7 +137,7 @@ function ChatPanelInner({ mode }: ChatPanelProps) {
   }
 
   return (
-    <div className="flex gap-5 h-[620px]">
+    <div className="flex gap-5 h-[calc(100vh-240px)] min-h-[620px]">
       <div className="w-[300px] shrink-0 bg-white rounded-[20px] border border-[#E0DEF7] flex flex-col overflow-hidden">
         <div className="p-4 border-b border-[#E0DEF7]">
           <h2 className="font-bold text-[#000929]">{mode === 'admin' ? 'Semua Chat' : 'Percakapan'}</h2>

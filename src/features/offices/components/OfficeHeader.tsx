@@ -9,8 +9,10 @@ export default function OfficeHeader({
   images,
 }:{
   image: string;
-  images: string[];
+  images?: string[];
 }) {
+  const imageList = images?.filter(img => img) || [];
+
   return (
     <section id="Gallery" className="relative w-full h-[550px] -mb-[50px] overflow-hidden">
       <div className="w-full h-full">
@@ -32,10 +34,10 @@ export default function OfficeHeader({
             />
           </SwiperSlide>
 
-          {images.map((img, index) => (
+          {imageList.map((img, index) => (
           <SwiperSlide key={index} className="w-full h-[550px] overflow-hidden">
             <Image
-              src="/assets/images/thumbnails/thumbnail-details-2.png"
+              src={img}
               width={600}
               height={550}
               className="w-full h-full object-cover"

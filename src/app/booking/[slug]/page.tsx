@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { officeSpaces } from '@/src/features/offices/data/officeSpaces.mock';
+import { getAllOffices } from '@/src/features/offices/store/providerOffices.store';
+import type { OfficeSpace } from '@/src/features/offices/types/officeSpace.types';
 
 type Props = {
   params: Promise<{
@@ -23,7 +24,7 @@ export default function BookingPage({ params }: { params: Props['params'] }) {
   const { slug } = use(params);
   const { user, isLoading } = useAuth();
   const router = useRouter();
-  const [office, setOffice] = useState<any>(null);
+  const [office, setOffice] = useState<OfficeSpace | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<number>(20);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
@@ -42,13 +43,21 @@ export default function BookingPage({ params }: { params: Props['params'] }) {
   }, [user, isLoading, router]);
 
   useEffect(() => {
-    const foundOffice = officeSpaces.find((item) => item.slug === slug);
+    if (isLoading || !user) return;
+    if (user.role === 'office_provider' || user.role === 'admin') {
+      alert('Hanya customer yang bisa melakukan booking.');
+      router.push(user.role === 'office_provider' ? '/provider' : '/admin');
+    }
+  }, [user, isLoading, router]);
+
+  useEffect(() => {
+    const foundOffice = getAllOffices().find((item) => item.slug === slug);
     if (foundOffice) {
       setOffice(foundOffice);
+      setPageLoading(false);
     } else {
       router.push('/');
     }
-    setPageLoading(false);
   }, [slug, router]);
 
   const calculatePrice = () => {
@@ -60,6 +69,15 @@ export default function BookingPage({ params }: { params: Props['params'] }) {
   const handleBooking = async () => {
   if (!user || !office) {
     alert('Please login first');
+    return;
+  }
+  if (user.role === 'office_provider' || user.role === 'admin') {
+    alert('Hanya customer yang bisa melakukan booking.');
+    router.push(user.role === 'office_provider' ? '/provider' : '/admin');
+    return;
+  }
+  if (office.isFullyBooked) {
+    alert('Kantor ini sedang fully booked.');
     return;
   }
 
@@ -131,7 +149,9 @@ export default function BookingPage({ params }: { params: Props['params'] }) {
           <h1 className="font-bold text-lg"><Link href="/">Home</Link></h1>
           <div className="flex items-center gap-3">
             <span className="font-semibold text-[#000929]">{user.name}</span>
-            <span className="bg-[#0D903A] text-white text-xs font-semibold px-4 py-1.5 rounded-full">User</span>
+            <span className="bg-[#0D903A] text-white text-xs font-semibold px-4 py-1.5 rounded-full">
+              {user.role === 'office_provider' ? 'Provider' : user.role === 'admin' ? 'Admin' : 'Customer'}
+            </span>
           </div>
         </div>
       </nav>

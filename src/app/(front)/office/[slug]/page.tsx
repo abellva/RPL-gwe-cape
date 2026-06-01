@@ -1,44 +1,39 @@
+'use client';
+
 import NavbarWrapper from "@/src/components/NavbarWrapper";
 import Link from "next/link";
 import Image from "next/image";
 import OfficeHeader from "@/src/features/offices/components/OfficeHeader";
-import { officeSpaces } from "@/src/features/offices/data/officeSpaces.mock";
-import { notFound } from "next/navigation";
 import OfficeFeatures from "@/src/features/offices/components/OfficeFeatures";
 import SalesContactCard from "@/src/features/offices/components/SalesContactCard";
 import SaveForLaterButton from "@/src/features/offices/components/SaveForLaterButton";
 import { StartChatButton } from "@/src/features/chat/components/StartChatButton";
+import { useEffect, useMemo } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { officeSpaces as seedOfficeSpaces } from "@/src/features/offices/data/officeSpaces.mock";
+import { getOfficeBySlug } from "@/src/features/offices/store/providerOffices.store";
+import { useAuth } from "@/src/features/auth/context/AuthContext";
 
-type Props = {
-  params: {
-    slug: string;
-  };
-};
+export default function OfficeSpaceDetailPage() {
+  const params = useParams<{ slug: string }>();
+  const router = useRouter();
+  const { user } = useAuth();
+  const slug = params?.slug ?? '';
 
-export const dynamic = 'force-dynamic';
+  const office = useMemo(() => {
+    if (!slug) return null;
+    return getOfficeBySlug(slug) ?? seedOfficeSpaces.find((item) => item.slug === slug) ?? null;
+  }, [slug]);
 
-import type { Metadata } from "next";
+  useEffect(() => {
+    if (slug && !office) router.push('/');
+  }, [slug, office, router]);
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const office = officeSpaces.find((item) => item.slug === slug);
-  if (!office) return { title: "Office Not Found | OfficeHub" };
-  return {
-    title: `${office.title} | OfficeHub`,
-    description: office.about,
-  };
-}
+  const isAdmin = user?.role === 'admin';
 
-export async function generateStaticParams() {
-  return officeSpaces.map((office) => ({
-    slug: office.slug,
-  }));
-}
+  if (!slug) return null;
 
-export default async function OfficeSpaceDetailPage({ params }: Props) {
-  const { slug } = await params;
-  const office = officeSpaces.find((item) => item.slug === slug);
-  if (!office) return notFound();
+  if (!office) return null;
 
   return (
     <>
@@ -125,28 +120,32 @@ export default async function OfficeSpaceDetailPage({ params }: Props) {
             </div>
             <hr className="border-[#F6F5FD]" />
             <div className="flex flex-col gap-[14px]">
-              {office.isFullyBooked ? (
+              {isAdmin ? (
+                <div className="w-full rounded-full p-[16px_26px] text-center bg-[#F6F5FD] font-bold text-[#000929]">
+                  Admin tidak bisa booking
+                </div>
+              ) : office.isFullyBooked ? (
                 <SaveForLaterButton
-  officeId={office.id}
-  officeTitle={office.title}
-  officeSlug={office.slug}
-  officeImage={office.image}
-  officePrice={office.price}
-  officeLocation={office.location}
-/>
+                  officeId={office.id}
+                  officeTitle={office.title}
+                  officeSlug={office.slug}
+                  officeImage={office.image}
+                  officePrice={office.price}
+                  officeLocation={office.location}
+                />
               ) : (
                 <>
-                <Link href={`/booking/${office.slug}`} className="flex items-center justify-center w-full rounded-full p-[16px_26px] gap-3 bg-[#0D903A] font-bold text-[#F7F7FD] hover:bg-[#0B7A2F] transition-colors">
-                  <Image src="/assets/images/icons/slider-horizontal-white.svg" className="w-6 h-6" alt="icon" width={24} height={24} />
-                  <span>Book This Office</span>
-                </Link>
-                {office.providerId && (
-                  <StartChatButton
-                    officeId={office.id}
-                    officeTitle={office.title}
-                    officeProviderId={office.providerId}
-                  />
-                )}
+                  <Link href={`/booking/${office.slug}`} className="flex items-center justify-center w-full rounded-full p-[16px_26px] gap-3 bg-[#0D903A] font-bold text-[#F7F7FD] hover:bg-[#0B7A2F] transition-colors">
+                    <Image src="/assets/images/icons/slider-horizontal-white.svg" className="w-6 h-6" alt="icon" width={24} height={24} />
+                    <span>Book This Office</span>
+                  </Link>
+                  {office.providerId && (
+                    <StartChatButton
+                      officeId={office.id}
+                      officeTitle={office.title}
+                      officeProviderId={office.providerId}
+                    />
+                  )}
                 </>
               )}
             </div>
@@ -155,15 +154,19 @@ export default async function OfficeSpaceDetailPage({ params }: Props) {
           <div className="flex flex-col rounded-[20px] border border-[#E0DEF7] p-[30px] gap-[20px] bg-white">
             <h2 className="font-bold">Contact Our Sales</h2>
             <div className="flex flex-col gap-[30px]">
-              {office.salesContacts.map((contact, index) => (
-                <SalesContactCard
-                  key={index}
-                  contact={contact}
-                  officeId={office.id}
-                  officeTitle={office.title}
-                  officeProviderId={office.providerId}
-                />
-              ))}
+              {office.salesContacts && office.salesContacts.length > 0 ? (
+                office.salesContacts.map((contact, index) => (
+                  <SalesContactCard
+                    key={index}
+                    contact={contact}
+                    officeId={office.id}
+                    officeTitle={office.title}
+                    officeProviderId={office.providerId}
+                  />
+                ))
+              ) : (
+                <p className="text-sm opacity-60">Belum ada sales contact</p>
+              )}
             </div>
           </div>
         </div>

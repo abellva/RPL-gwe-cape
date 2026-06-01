@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/src/features/auth/context/AuthContext';
@@ -23,13 +23,10 @@ export default function CustomerBookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
 
-  useEffect(() => {
-    if (user?.id) fetchBookings();
-  }, [user?.id]);
-
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
+    if (!user?.id) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/user/${user?.id}`);
+      const response = await fetch(`http://localhost:5000/api/bookings/user/${user.id}`);
       const data = await response.json();
       setBookings(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -38,7 +35,12 @@ export default function CustomerBookings() {
     } finally {
       setLoadingBookings(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user?.id) fetchBookings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const getOfficeData = (slug: string) =>
     officeSpaces.find((o) => o.slug === slug);
@@ -62,7 +64,7 @@ export default function CustomerBookings() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
         <h2 className="font-bold text-lg">My Bookings</h2>
         <p className="text-sm opacity-60 mt-1">Kelola semua pemesanan kantor Anda</p>
@@ -86,7 +88,7 @@ export default function CustomerBookings() {
         ) : (
           bookings.map((booking) => {
             const office = getOfficeData(booking.office_slug);
-            const bookedDate = new Date(booking.created_at).toLocaleDateString('id-ID', {
+            const bookedDate = new Date(booking.created_at).toLocaleDateString('en-US', {
               day: 'numeric', month: 'long', year: 'numeric',
             });
 

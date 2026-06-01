@@ -43,14 +43,15 @@ export default function ProviderBookingsPage() {
   }
 
   return (
-    <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
-      <h2 className="font-bold text-lg text-[#000929] mb-6">Booking Kantor Saya ({bookings.length})</h2>
+    <div className="space-y-8">
+      <div className="bg-white border border-[#E0DEF7] rounded-[20px] p-6">
+        <h2 className="font-bold text-lg text-[#000929] mb-6">Booking Kantor Saya ({bookings.length})</h2>
 
-      {bookings.length === 0 ? (
-        <p className="text-sm opacity-50 text-center py-12">Belum ada booking untuk kantor Anda.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        {bookings.length === 0 ? (
+          <p className="text-sm opacity-50 text-center py-12">Belum ada booking untuk kantor Anda.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E0DEF7] text-left opacity-60">
                 <th className="pb-3 font-medium">ID</th>
@@ -77,7 +78,7 @@ export default function ProviderBookingsPage() {
                   <td className="py-4">{b.duration}</td>
                   <td className="py-4 font-semibold text-[#FF852D]">Rp {Number(b.price).toLocaleString('id-ID')}</td>
                   <td className="py-4 opacity-70">
-                    {new Date(b.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(b.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </td>
                   <td className="py-4"><StatusBadge status={b.status} /></td>
                   <td className="py-4">
@@ -95,9 +96,10 @@ export default function ProviderBookingsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
-      )}
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

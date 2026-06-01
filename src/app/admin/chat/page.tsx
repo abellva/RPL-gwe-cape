@@ -3,5 +3,9 @@
 import { ChatPanel } from '@/src/features/chat/components/ChatPanel';
 
 export default function AdminChatPage() {
-  return <ChatPanel mode="admin" />;
+  return (
+    <div className="min-w-0">
+      <ChatPanel mode="admin" />
+    </div>
+  );
 }
